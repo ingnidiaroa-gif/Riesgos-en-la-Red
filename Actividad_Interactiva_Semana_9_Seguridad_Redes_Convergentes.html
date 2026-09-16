@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 9 - Seguridad en Redes Convergentes</title>
+<style>
+:root{--green:#006b3f;--green2:#008f5a;--blue:#155eef;--red:#b42318;--orange:#f79009;--bg:#f6faf7;--text:#2d2d2d;--muted:#667085;}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.45} header{background:var(--green);color:white;padding:28px 32px} header h1{margin:0;font-size:28px} header p{margin:8px 0 0;font-size:16px} main{max-width:1100px;margin:24px auto;padding:0 18px 60px}.card{background:#fff;border:1px solid #d8e6dc;border-radius:16px;padding:22px;margin:16px 0;box-shadow:0 8px 24px rgba(0,0,0,.05)} h2{margin-top:0;color:var(--green);font-size:22px}.case{border-left:7px solid var(--green);background:#eef8f2}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.pill{padding:12px;border:1px solid #cde4d6;border-radius:12px;background:#f8fbf9}.btn{background:var(--green);color:white;border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer;margin:6px 6px 6px 0}.btn.secondary{background:var(--blue)}.btn.orange{background:var(--orange)}.option{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border:1px solid #d0d5dd;border-radius:10px;background:white;cursor:pointer}.option.selected{border-color:var(--blue);background:#eff6ff}.option.correct{border-color:var(--green);background:#ecfdf3}.option.incorrect{border-color:var(--red);background:#fff1f0}.feedback{padding:12px;border-radius:10px;margin-top:10px;background:#f2f4f7;border:1px solid #eaecf0}.row{display:grid;grid-template-columns:1.3fr 1fr 1.2fr;gap:10px;align-items:center;margin:8px 0}.tag{padding:8px 10px;border-radius:999px;background:#ecfdf3;border:1px solid #abefc6;text-align:center;font-weight:bold;font-size:13px}.select{padding:9px;border-radius:8px;border:1px solid #d0d5dd;width:100%}.score{font-size:20px;font-weight:bold;color:var(--green)}textarea{width:100%;min-height:90px;border-radius:12px;border:1px solid #d0d5dd;padding:12px;font-family:Arial}.rubric{font-size:14px;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:22px}.hidden{display:none}.callout{background:#fff7ed;border:1px solid #fedf89;border-radius:12px;padding:14px}.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header><h1>Semana 9 · Seguridad en Redes Convergentes</h1><p>Actividad interactiva: Comité de Seguridad VitalNet</p></header>
+<main>
+<section class="card case"><h2>Contexto del caso</h2><p><b>Clínica VitalNet</b> integra telefonía IP, telemedicina, historia clínica en nube, cámaras IP, red administrativa, WiFi de visitantes y dispositivos biomédicos. En una mañana de alta demanda, se degradan videollamadas, aparecen intentos fallidos de acceso a la historia clínica y una cámara IP genera tráfico anómalo.</p><p><b>Reto:</b> actuar como equipo de ingeniería de seguridad y proponer controles priorizados sin afectar la continuidad del servicio.</p></section>
+<section class="card"><h2>1. Diagnóstico rápido</h2><p>Seleccione el riesgo que debe revisarse primero. Después escriba una justificación técnica breve.</p><div id="diagnostico"></div><textarea id="justificacion" placeholder="Justifique su decisión: activo afectado, amenaza, impacto y control inicial..."></textarea><button class="btn" onclick="validarDiagnostico()">Validar diagnóstico</button><div id="fbDiag" class="feedback hidden"></div></section>
+<section class="card"><h2>2. Relacione amenaza y control</h2><p>Para cada amenaza seleccione el control más pertinente.</p><div id="matriz"></div><button class="btn secondary" onclick="validarMatriz()">Validar matriz</button><div id="fbMatriz" class="feedback hidden"></div></section>
+<section class="card"><h2>3. Priorización de controles</h2><p>Seleccione tres controles que implementaría en la primera fase. Deben proteger continuidad, datos personales e identidad.</p><div class="grid" id="prioridad"></div><button class="btn orange" onclick="validarPrioridad()">Validar priorización</button><div id="fbPrioridad" class="feedback hidden"></div></section>
+<section class="card"><h2>4. Quiz de salida</h2><div id="quiz"></div><button class="btn" onclick="calificarQuiz()">Calificar quiz</button><p class="score" id="score"></p><div id="recomendacion" class="feedback hidden"></div></section>
+<section class="card"><h2>5. Evidencia para entregar o socializar</h2><p>Al finalizar, tome captura de pantalla del puntaje y complete esta frase:</p><div class="callout"><b>La propuesta de seguridad para una red convergente debe partir de...</b></div><p class="small">Sugerencia para la docente: usar esta respuesta como cierre de la sesión o como participación en el foro del CMAD.</p></section>
+</main><footer>Universidad de Cundinamarca · Instituto de Posgrados · CADI Redes Convergentes</footer>
+<script>
+const diagnosticos=[['A','Comprar más ancho de banda para toda la red.'],['B','Identificar activos críticos, amenazas, impacto y controles prioritarios.'],['C','Desconectar todas las cámaras IP de forma permanente.'],['D','Migrar todos los servicios a una red pública sin autenticación.']];
+let diag='';
+document.getElementById('diagnostico').innerHTML=diagnosticos.map(o=>`<button class="option" onclick="selectDiag(this,'${o[0]}')"><b>${o[0]}.</b> ${o[1]}</button>`).join('');
+function selectDiag(el,v){diag=v;document.querySelectorAll('#diagnostico .option').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
+function validarDiagnostico(){const fb=document.getElementById('fbDiag');fb.classList.remove('hidden'); if(diag==='B'){fb.innerHTML='✅ Correcto. En seguridad no se inicia por la herramienta, sino por el análisis de riesgo: activo, amenaza, impacto y control.'}else{fb.innerHTML='⚠️ Revise la decisión. La primera acción no debe ser comprar tecnología ni desconectar servicios sin análisis, sino establecer una matriz riesgo-control.'}}
+const items=[
+{a:'DoS/DDoS contra controlador SDN',c:'Control de tasa, monitoreo y protección del plano de control'},
+{a:'Robo de credenciales de personal médico',c:'MFA, SSO y políticas de mínimo privilegio'},
+{a:'Cámara IP con tráfico anómalo',c:'Segmentación IoT, claves únicas y bloqueo de administración externa'},
+{a:'Intercepción de datos clínicos',c:'Cifrado en tránsito y en reposo'},
+{a:'WiFi de invitados con acceso interno',c:'Red aislada, firewall y portal cautivo'}
+];
+const controles=['MFA, SSO y políticas de mínimo privilegio','Red aislada, firewall y portal cautivo','Control de tasa, monitoreo y protección del plano de control','Segmentación IoT, claves únicas y bloqueo de administración externa','Cifrado en tránsito y en reposo'];
+document.getElementById('matriz').innerHTML=items.map((it,i)=>`<div class="row"><div class="tag">${it.a}</div><select class="select" id="sel${i}"><option value="">Seleccione control...</option>${controles.map(c=>`<option>${c}</option>`).join('')}</select><div class="rubric">Piense: ¿qué control reduce el riesgo?</div></div>`).join('');
+function validarMatriz(){let ok=0;items.forEach((it,i)=>{if(document.getElementById('sel'+i).value===it.c)ok++});const fb=document.getElementById('fbMatriz');fb.classList.remove('hidden');fb.innerHTML=`Resultado: <b>${ok}/5</b>. ${ok===5?'Excelente relación amenaza-control.':'Revise las amenazas que no tienen un control directamente asociado.'}`}
+const controls=['MFA para historia clínica','Segmentación IoT/CCTV','Red WiFi invitados aislada','Cambiar computadores por equipos nuevos','Cifrado TLS/VPN y cifrado en reposo','Monitoreo de controlador SDN y control de tasa','Comprar más ancho de banda sin diagnóstico','Permitir cuentas compartidas por turno'];
+let selected=[];
+document.getElementById('prioridad').innerHTML=controls.map((c,i)=>`<button class="option" onclick="togglePrio(this,${i})">${c}</button>`).join('');
+function togglePrio(el,i){ if(selected.includes(i)){selected=selected.filter(x=>x!==i);el.classList.remove('selected')} else {selected.push(i);el.classList.add('selected')} }
+function validarPrioridad(){const ideal=[0,1,4,5];let ok=selected.filter(x=>ideal.includes(x)).length;const fb=document.getElementById('fbPrioridad');fb.classList.remove('hidden'); if(ok>=3 && selected.length===3){fb.innerHTML='✅ Buena priorización. Protege identidad, datos sensibles y superficie IoT/SDN.'}else{fb.innerHTML='⚠️ Ajuste la priorización. Una primera fase debe proteger identidad, datos sensibles, segmentación y disponibilidad del control de red.'}}
+const preguntas=[
+{q:'¿Qué principio se ve más afectado por un ataque DoS?',ops:['Confidencialidad','Disponibilidad','No repudio','Estética del diseño'],r:1},
+{q:'¿Por qué el controlador SDN es un activo crítico?',ops:['Porque reemplaza todos los usuarios','Porque concentra decisiones del plano de control','Porque evita cualquier ataque automáticamente','Porque elimina el cifrado'],r:1},
+{q:'¿Qué control ayuda a evitar movimiento lateral desde cámaras IP?',ops:['Segmentación/VLAN IoT','Más almacenamiento','Cambiar el color del cable','Eliminar el monitoreo'],r:0},
+{q:'¿Qué protege principalmente el cifrado en tránsito?',ops:['La confidencialidad e integridad de la información que circula','El precio del enlace','La ubicación física del rack','El horario laboral'],r:0},
+{q:'Una propuesta de seguridad sólida debe...',ops:['Listar herramientas sin justificar','Conectar activo, amenaza, impacto y control','Eliminar todos los servicios convergentes','Ignorar la operación del negocio'],r:1}
+];
+document.getElementById('quiz').innerHTML=preguntas.map((p,i)=>`<div class="pill"><b>${i+1}. ${p.q}</b>${p.ops.map((o,j)=>`<button class="option" data-q="${i}" data-o="${j}" onclick="selQuiz(${i},${j},this)">${o}</button>`).join('')}</div>`).join('');
+let ans={}; function selQuiz(i,j,el){ans[i]=j;document.querySelectorAll(`[data-q='${i}']`).forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
+function calificarQuiz(){let ok=0;preguntas.forEach((p,i)=>{document.querySelectorAll(`[data-q='${i}']`).forEach(el=>{const j=parseInt(el.dataset.o);el.classList.toggle('correct',j===p.r);el.classList.toggle('incorrect',ans[i]===j && j!==p.r)}); if(ans[i]===p.r)ok++});document.getElementById('score').textContent=`Puntaje: ${ok}/5`;const rec=document.getElementById('recomendacion');rec.classList.remove('hidden');rec.innerHTML= ok>=4?'Excelente. Puede avanzar a la construcción de la propuesta de seguridad.':'Revise nuevamente la relación entre activo, amenaza, impacto y control antes de formular la propuesta.'}
+</script>
+</body></html>
